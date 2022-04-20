@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 
 
@@ -37,6 +37,22 @@ void	process_input(int file_fd, char **delim, int i)
 		}
 		free(input);
 	}
+}
+
+
+//	function that counts the amount of heredoc in the redirect linked list
+int	count_heredoc_in_redirect(t_red *redir)
+{
+	int	count;
+
+	count = 0;
+	while (redir != NULL)
+	{
+		if (ft_strcmp("<<", redir->op) == 0)
+			count++;
+		redir = redir->next;
+	}
+	return (count);
 }
 
 //	function that will create the temporary file for each heredoc
@@ -95,6 +111,11 @@ int	process_heredoc(t_list *cmd_block)
 	return (last_exit_code);
 }
 
+//	function that create an int array containing the starting number of the temp 
+//	file for each command that has at least one heredoc. if the commmand don't 
+//	have a heredoc the int would be -1. if it does have a heredoc it could be 
+//	for example be 3. The temporary file would be called 3.tmp
+
 int	*create_heredoc_index_array(t_list *cmd_block)
 {
 	int		count;
@@ -118,21 +139,6 @@ int	*create_heredoc_index_array(t_list *cmd_block)
 		cmd_block = cmd_block->next;
 	}
 	return (heredoc_index_array);
-}
-
-//	function that counts the amount of heredoc in the redirect linked list
-int	count_heredoc_in_redirect(t_red *redir)
-{
-	int	count;
-
-	count = 0;
-	while (redir != NULL)
-	{
-		if (ft_strcmp("<<", redir->op) == 0)
-			count++;
-		redir = redir->next;
-	}
-	return (count);
 }
 
 /*

@@ -118,6 +118,18 @@ void	wait_for_child_processes(pid_t last_pid, int amount_commands,
 			t_data *data);
 
 /*
+**	Heredoc 
+** -------------------------------------------------
+*/
+
+int		process_heredoc(t_list *cmd_block);
+
+char	*create_temp_file_name(int i);
+void	clean_heredoc_temp_files(void);
+char	**get_heredoc_delim(t_list *cmd_block);
+
+
+/*
 ** Utils
 ** -------------------------------------------------
 */
