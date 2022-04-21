@@ -1,7 +1,5 @@
 #include "../includes/minishell.h"
 
-
-
 //either put this function in seperate file or a special signals file
 // signal handling for the heredoc
 
@@ -38,7 +36,6 @@ void	process_input(int file_fd, char **delim, int i)
 		free(input);
 	}
 }
-
 
 //	function that counts the amount of heredoc in the redirect linked list
 int	count_heredoc_in_redirect(t_red *redir)
@@ -111,7 +108,7 @@ int	process_heredoc(t_list *cmd_block)
 	return (last_exit_code);
 }
 
-//	function that create an int array containing the starting number of the temp 
+//	function that create an int array containing the starting number of the temp
 //	file for each command that has at least one heredoc. if the commmand don't 
 //	have a heredoc the int would be -1. if it does have a heredoc it could be 
 //	for example be 3. The temporary file would be called 3.tmp

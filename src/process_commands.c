@@ -1,4 +1,5 @@
 #include "../includes/minishell.h"
+
 void	exec_path_cmd(t_list *cmd_block, t_data *data)
 {
 	char	*path;
@@ -51,7 +52,7 @@ int	count_commands(t_list *cmd_block)
 
 //	function that process the command block
 
-void	process_cmds(t_list *cmd_block, t_data *data)
+void	process_commands(t_list *cmd_block, t_data *data)
 {
 	pid_t	pid;
 	int		amount_commands;

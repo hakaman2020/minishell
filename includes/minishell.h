@@ -1,5 +1,5 @@
-#ifndef MINISHEL_H
-# define MINISHEL_H
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
 # include <unistd.h> 
 # include <stdio.h>
@@ -36,14 +36,14 @@ typedef enum e_bool
 ** 		term_without_echo: terminal with echtl deactivated
 */
 
-typedef struct			s_red
+typedef struct s_red
 {
 	char				*op;
 	char				*file;
 	struct s_red		*next;
 }						t_red;
 
-typedef struct		s_list
+typedef struct s_list
 {
 	int				index_cmd;
 	char			**cmd;
@@ -51,7 +51,7 @@ typedef struct		s_list
 	struct s_list	*next;
 }					t_list;
 
-typedef struct		s_data
+typedef struct s_data
 {
 	int				*heredoc_index_array;
 	int				last_exit_code;
@@ -113,6 +113,7 @@ void	join_arrays(char ***cmd, char *token);
 
 char	*validate_and_locate_cmd(char *cmd, char **envp);
 void	process_commands(t_list *cmd_blocks, t_data *data);
+int		count_commands(t_list *cmd_blocks);
 void	process_redir(t_red *red_list, t_data *data, int cmdnbr);
 void	wait_for_child_processes(pid_t last_pid, int amount_commands,
 			t_data *data);
@@ -123,11 +124,10 @@ void	wait_for_child_processes(pid_t last_pid, int amount_commands,
 */
 
 int		process_heredoc(t_list *cmd_block);
-
 char	*create_temp_file_name(int i);
 void	clean_heredoc_temp_files(void);
 char	**get_heredoc_delim(t_list *cmd_block);
-
+int		*create_heredoc_index_array(t_list *cmd_block);
 
 /*
 ** Utils

@@ -16,9 +16,9 @@ S_SRC	=	main.c\
 S_PATH	=	src/
 S_OBJ	=	$(S_SRC:%.c=$(S_PATH)%.o)
 
-BUILT_SRC	=	builtin.c\
+BUILT_SRC	=	builtin_start_echo.c\
 				builtin_env_cd_unset.c\
-				builtin_exit_pwd_echo.c\
+				builtin_exit_pwd.c\
 				builtin_export.c
 BUILT_PATH	=	builtins/
 BUILT_OBJ	=	$(BUILT_SRC:%.c=$(BUILT_PATH)%.o)
