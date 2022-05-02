@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   process_heredoc_utils.c                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: cpopa <cpopa@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/05/01 17:51:51 by cpopa         #+#    #+#                 */
+/*   Updated: 2022/05/01 17:51:52 by cpopa         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 //	function to create the temp file name
@@ -10,7 +22,7 @@ char	*create_temp_file_name(int i)
 	number = ft_itoa(i);
 	if (number == NULL)
 		exit_on_error("Error :", 1);
-	filename = ft_strjoin(number, ".tmp");
+	filename = ft_strjoin(".tmp_file_heredoc.", number);
 	free(number);
 	if (filename == NULL)
 		exit_on_error("Error :", 1);
@@ -34,6 +46,7 @@ void	clean_heredoc_temp_files(void)
 		filename = create_temp_file_name(i);
 		if (access(filename, F_OK) == -1)
 		{
+			free(filename);
 			done = TRUE;
 			break ;
 		}

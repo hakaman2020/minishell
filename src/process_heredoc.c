@@ -1,16 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   process_heredoc.c                                  :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: cpopa <cpopa@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/05/01 17:51:39 by cpopa         #+#    #+#                 */
+/*   Updated: 2022/05/01 17:51:42 by cpopa         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
-
-//either put this function in seperate file or a special signals file
-// signal handling for the heredoc
-
-void	heredoc_sighandler(int sig_no)
-{
-	if (sig_no == SIGINT)
-	{
-		clean_heredoc_temp_files();
-		exit(130);
-	}
-}
 
 //	function that process the heredoc input
 
@@ -89,21 +89,20 @@ int	process_heredoc(t_list *cmd_block)
 	int		last_exit_code;
 
 	last_exit_code = 0;
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
 	pid = fork();
 	if (pid < 0)
 		exit_on_error("Error :", 1);
 	else if (pid == 0)
 	{
 		signal(SIGINT, heredoc_sighandler);
-		signal(SIGQUIT, SIG_DFL);
+		signal(SIGQUIT, SIG_IGN);
 		create_temp_files(cmd_block);
 	}
 	else
 	{
 		waitpid(pid, &wstatus, 0);
-		last_exit_code = WEXITSTATUS(wstatus);
+		if (WIFEXITED(wstatus))
+			last_exit_code = WEXITSTATUS(wstatus);
 	}
 	return (last_exit_code);
 }
@@ -129,29 +128,15 @@ int	*create_heredoc_index_array(t_list *cmd_block)
 	{
 		redir = cmd_block->redirect;
 		count = count_heredoc_in_redirect(redir);
-		heredoc_index_array[cmd_block->index_cmd -1] = -1;
 		if (count != 0)
 			heredoc_index_array[cmd_block->index_cmd - 1] = temp_index;
 		temp_index += count;
 		cmd_block = cmd_block->next;
 	}
+	if (temp_index == 0)
+	{
+		free(heredoc_index_array);
+		return (NULL);
+	}
 	return (heredoc_index_array);
 }
-
-/*
-//TEST
-int	main(void)
-{
-	t_red	redir2 = {.op = "<<", .file = "END", .next = NULL};
-	t_red	redir = {.op = "<<", .file = "END2", .next = &redir2};
-	t_list	cmd_block = {.next = NULL, .redirect = &redir};
-	int		exit_code = process_heredoc(&cmd_block);
-	printf("exit code = %d", exit_code);
-	system("cat 0.tmp");
-	//clean_heredoc_tmp_files();
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-	while(1);
-	return (0);
-}
-*/

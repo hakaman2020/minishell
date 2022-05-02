@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   builtin_export.c                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: cpopa <cpopa@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/05/01 17:33:41 by cpopa         #+#    #+#                 */
+/*   Updated: 2022/05/01 17:33:42 by cpopa         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 //-----------------------------------------------------------------------------
@@ -111,13 +123,11 @@ int	ft_export(char **args, char ***envp_list)
 		{
 			split = ft_split_variable(*args);
 			if (is_valid_env_name(split[0]) == FALSE)
-			{
-				write(2, "export : `", 10);
-				write(2, split[0], ft_strlen(split[0]));
-				write(2, "` : not a valid identifier\n", 27);
-				exit_code = 1;
-			}
-			else
+				exit_code = ft_export_error(*args);
+			else if (find_variable_position(*envp_list, split[0]) != -1
+				&& split[1] != NULL)
+				set_variable(envp_list, *args);
+			else if (find_variable_position(*envp_list, split[0]) == -1)
 				set_variable(envp_list, *args);
 			free_string_array(split);
 			args++;

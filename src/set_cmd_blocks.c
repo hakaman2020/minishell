@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   set_cmd_blocks.c                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: cpopa <cpopa@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/05/01 17:52:15 by cpopa         #+#    #+#                 */
+/*   Updated: 2022/05/01 17:52:16 by cpopa         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 void	create_add_new_block(t_list **cmd_blocks, int index)
@@ -7,7 +19,7 @@ void	create_add_new_block(t_list **cmd_blocks, int index)
 
 	new_elem = malloc(sizeof(t_list) * 1);
 	if (!new_elem)
-		malloc_error_exit();
+		exit_on_error("Error :", 1);
 	new_elem->next = NULL;
 	new_elem->redirect = NULL;
 	new_elem->cmd = NULL;
@@ -30,7 +42,7 @@ void	add_to_redirect(t_red **lst, char *str1, char *str2)
 
 	new_elem = malloc(sizeof(t_red) * 1);
 	if (!new_elem)
-		malloc_error_exit();
+		exit_on_error("Error :", 1);
 	new_elem->next = NULL;
 	new_elem->op = ft_strdup(str1);
 	new_elem->file = ft_strdup(str2);
@@ -49,7 +61,7 @@ void	create_cmd(char ***cmd, char *token)
 {
 	*cmd = malloc(sizeof(char *) * 2);
 	if (!*cmd)
-		malloc_error_exit();
+		exit_on_error("Error :", 1);
 	(*cmd)[0] = ft_strdup(token);
 	(*cmd)[1] = NULL;
 }

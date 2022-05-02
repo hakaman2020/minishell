@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   envp_copy.c                                        :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: cpopa <cpopa@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/05/01 17:34:00 by cpopa         #+#    #+#                 */
+/*   Updated: 2022/05/01 17:34:08 by cpopa         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-int	count_variables(char **array) /// DUPLICATE ?
+int	count_arrays(char **array)
 {
 	int	count;
 
@@ -47,19 +59,19 @@ char	**ft_split_variable(char *variable)
 
 	split = malloc(sizeof (char *) * 3);
 	if (split == NULL)
-		malloc_error_exit();
+		exit_on_error("Error :", 1);
 	i = 0;
 	split[1] = NULL;
 	while (variable[i] != '=' && variable[i] != '\0')
 		i++;
 	split[0] = ft_substr(variable, 0, i);
 	if (split[0] == NULL)
-		malloc_error_exit();
+		exit_on_error("Error :", 1);
 	if (variable[i] == '=')
 	{
 		split[1] = ft_strdup(&variable[i + 1]);
 		if (split[1] == NULL)
-			malloc_error_exit();
+			exit_on_error("Error :", 1);
 	}
 	split[2] = NULL;
 	return (split);
@@ -76,14 +88,14 @@ char	**copy_envp(char **envp)
 	char	**envp_copy;
 	int		i;
 
-	count = count_variables(envp);
+	count = count_arrays(envp);
 	envp_copy = malloc(sizeof (char *) * (count + 1));
 	i = 0;
 	while (i < count)
 	{
 		envp_copy[i] = ft_strdup(envp[i]);
 		if (envp_copy[i] == NULL)
-			malloc_error_exit();
+			exit_on_error("Error :", 1);
 		i++;
 	}
 	envp_copy[count] = NULL;

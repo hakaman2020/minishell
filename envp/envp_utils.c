@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   envp_utils.c                                       :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: cpopa <cpopa@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2022/05/01 17:34:13 by cpopa         #+#    #+#                 */
+/*   Updated: 2022/05/01 17:34:14 by cpopa         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 //	function will copy the given envp list and insert the variable at the end
@@ -9,21 +21,21 @@ void	insert_variable(char ***envp, char *variable)
 	int		count;
 	char	**new_envp;
 
-	count = count_variables(*envp);
+	count = count_arrays(*envp);
 	new_envp = malloc (sizeof (char *) * (count + 2));
 	if (new_envp == NULL)
-		malloc_error_exit();
+		exit_on_error("Error :", 1);
 	i = 0;
 	while (i < count)
 	{
 		new_envp[i] = ft_strdup((*envp)[i]);
 		if (new_envp[i] == NULL)
-			malloc_error_exit();
+			exit_on_error("Error :", 1);
 		i++;
 	}
 	new_envp[count] = ft_strdup(variable);
 	if (new_envp[count] == NULL)
-		malloc_error_exit();
+		exit_on_error("Error :", 1);
 	new_envp[count + 1] = NULL;
 	free_string_array(*envp);
 	*envp = new_envp;
@@ -44,7 +56,7 @@ void	set_variable(char ***envp, char *variable)
 		free((*envp)[pos]);
 		(*envp)[pos] = ft_strdup(variable);
 		if ((*envp)[pos] == NULL)
-			malloc_error_exit();
+			exit_on_error("Error :", 1);
 	}
 	else
 		insert_variable(envp, variable);
@@ -59,7 +71,7 @@ static void	remove_variable(char ***envp, int position)
 	int		i;
 	int		j;
 
-	count = count_variables(*envp);
+	count = count_arrays(*envp);
 	new_envp = malloc(sizeof(char *) * count);
 	i = 0;
 	j = 0;
@@ -69,7 +81,7 @@ static void	remove_variable(char ***envp, int position)
 		{
 			new_envp[j] = ft_strdup((*envp)[i]);
 			if (new_envp[j] == NULL)
-				malloc_error_exit();
+				exit_on_error("Error :", 1);
 			j++;
 		}
 		i++;
